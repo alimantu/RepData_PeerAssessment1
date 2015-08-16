@@ -58,6 +58,8 @@ There is some changes in the central part of our hist.
 
 ```{r}
 newData$weekdays  <- ifelse(weekdays(strptime(newData$date, format = "%Y-%m-%d")) %in% c("Saturday", "Sunday"), "weekend", "weekday")
-ggplot(newData, aes(x = interval, y = steps, group = weekdays))+
-    geom_line()
+newMeanData <- aggregate(steps ~ interval + weekdays, newData, mean)
+ggplot(newMeanData, aes(x = interval, y = steps, group = weekdays, col = weekdays, fill = weekdays))+
+    geom_line() + 
+    facet_grid(weekdays ~ .)
 ```

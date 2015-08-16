@@ -28,16 +28,13 @@ Calculating the *sum* of the steps ped day and making a histogram using **ggplot
 
 ```r
 library(ggplot2)
-```
-
-```
-## Warning: package 'ggplot2' was built under R version 3.2.1
-```
-
-```r
 totalStepsData  <- aggregate(steps ~ date, data, sum)
 ggplot(totalStepsData, aes(x = steps))+
     geom_histogram(fill = "Green", colour = "Black")
+```
+
+```
+## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
@@ -100,7 +97,22 @@ ggplot(newTotalStepsData, aes(x = steps))+
     geom_histogram(fill = "Green", colour = "Black")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+```
+## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+There is some changes in the central part of our hist.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+
+```r
+newData$weekdays  <- ifelse(weekdays(strptime(newData$date, format = "%Y-%m-%d")) %in% c("Saturday", "Sunday"), "weekend", "weekday")
+newMeanData <- aggregate(steps ~ interval + weekdays, newData, mean)
+ggplot(newMeanData, aes(x = interval, y = steps, group = weekdays, col = weekdays, fill = weekdays))+
+    geom_line() + 
+    facet_grid(weekdays ~ .)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
